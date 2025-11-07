@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SP Chatbot</title>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f2f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 370px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #ff7f50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .chat-log {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+
+    .userText span, .botText span {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 18px;
+      margin: 8px 0;
+      max-width: 80%;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    .userText {
+      text-align: right;
+    }
+
+    .userText span {
+      background: #d1e7ff;
+      color: #000;
+    }
+
+    .botText {
+      text-align: left;
+    }
+
+    .botText span {
+      background: #ffeeba;
+      color: #000;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+      background: #fff;
+    }
+
+    #userBox {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px;
+      font-size: 15px;
+    }
+
+    button {
+      background: #ff7f50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ff9966;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">💬 SP Chatbot</div>
+
+    <div id="chatLog" class="chat-log">
+      <div class="botText"><span>SP: Hello! I'm your friendly restaurant assistant 🍽️<br>How can I help you today?</span></div>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" id="userBox" placeholder="Type your message..." onkeydown="if(event.key === 'Enter'){talk();}">
+      <button onclick="talk()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function talk() {
+      let userInput = document.getElementById('userBox').value.trim().toLowerCase();
+      let chatLog = document.getElementById('chatLog');
+
+      if (userInput === "") return;
+
+      chatLog.innerHTML += `<div class='userText'><span>You: ${userInput}</span></div>`;
+
+      let response = getBotResponse(userInput);
+
+      setTimeout(() => {
+        chatLog.innerHTML += `<div class='botText'><span>SP: ${response}</span></div>`;
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }, 400);
+
+      document.getElementById('userBox').value = "";
+    }
+
+    function getBotResponse(input) {
+      // ✅ 1. Greetings
+      if (input.includes("hi") || input.includes("hello") || input.includes("hey")) {
+        return "Hey there! 👋 Welcome to SP Restaurant. How can I assist you today?";
+      }
+
+      // ✅ 2. Today's specials
+      if (input.includes("today") && (input.includes("special") || input.includes("offers") || input.includes("dish"))) {
+        return "🥘 Today's Specials:<br>⭐ Chicken Biryani – ₹350<br>⭐ Paneer Butter Masala – ₹280<br>⭐ Vegetable Pulao – ₹220<br>⭐ Masala Dosa – ₹150<br>Would you like me to tell you more about any of these?";
+      }
+
+      // ✅ 3. Menu overview
+      if (input.includes("menu") || input.includes("dishes") || input.includes("food")) {
+        return "🍽️ Our Menu:<br>1️⃣ Chicken Biryani – ₹350<br>2️⃣ Creamy Alfredo Pasta – ₹300<br>3️⃣ Paneer Butter Masala – ₹280<br>4️⃣ Vegetable Pulao – ₹220<br>5️⃣ Masala Dosa – ₹150<br>6️⃣ Idli Sambar – ₹120<br><br>Ask me about any dish for more details!";
+      }
+
+      // ✅ 4. Individual dish details
+      if (input.includes("biryani")) {
+        return "🍗 Chicken Biryani – ₹350<br>Aromatic basmati rice cooked with tender chicken and exotic spices. Served with raita and salad.";
+      }
+      if (input.includes("pasta")) {
+        return "🍝 Creamy Alfredo Pasta – ₹300<br>Rich and creamy garlic parmesan sauce served over freshly made pasta. Perfect comfort food!";
+      }
+      if (input.includes("paneer")) {
+        return "🧀 Paneer Butter Masala – ₹280<br>Soft paneer cubes simmered in a buttery tomato gravy, mildly spiced and creamy.";
+      }
+      if (input.includes("pulao")) {
+        return "🥦 Vegetable Pulao – ₹220<br>Fragrant rice cooked with fresh vegetables and mild spices — light, healthy, and flavorful!";
+      }
+      if (input.includes("dosa")) {
+        return "🥞 Masala Dosa – ₹150<br>Crispy rice crepe filled with a delicious spiced potato stuffing, served with chutney and sambar.";
+      }
+      if (input.includes("idli")) {
+        return "🍛 Idli Sambar – ₹120<br>Soft, fluffy steamed rice cakes served with hot sambar and coconut chutney.";
+      }
+
+      // ✅ 5. About section
+      if (input.includes("who are you") || input.includes("what is your name")) {
+        return "I'm SP 🤖, your restaurant assistant bot — here to help you explore our menu, specials, and more!";
+      }
+
+      // ✅ 6. General info
+      if (input.includes("how are you")) {
+        return "I'm doing great! 😊 Ready to serve you some delicious dishes!";
+      }
+
+      if (input.includes("followers") || input.includes("customers")) {
+        return "I don't have followers, but we have thousands of happy food lovers ❤️";
+      }
+
+      if (input.includes("ok") || input.includes("thanks") || input.includes("thank you")) {
+        return "You're most welcome! 😊 Enjoy your meal!";
+      }
+
+      if (input.includes("bye") || input.includes("see you")) {
+        return "Goodbye! 👋 Hope to see you again soon at SP Restaurant!";
+      }
+
+      // ✅ 7. Default fallback
+      return "Sorry, I didn’t understand that 😅<br>You can ask me things like:<br>👉 What are today's specials?<br>👉 Show me the menu<br>👉 Tell me about Chicken Biryani<br>👉 Price of Paneer Butter Masala";
+    }
+  </script>
+
+</body>
+</html>
